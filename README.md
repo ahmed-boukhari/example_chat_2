@@ -1,5 +1,7 @@
 # Example Chat 2
 
+Need to download large files with LFS (or manually)!
+
 License (Copyleft)
 ------------------
 This project is intentionally licensed under a strong copyleft license to ensure it and its descendants remain free and open under the same terms.
