@@ -1,0 +1,97 @@
+{
+  "added_tokens_decoder": {
+    "65527": {
+      "content": "<|bos|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65528": {
+      "content": "<|user_start|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65529": {
+      "content": "<|user_end|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65530": {
+      "content": "<|assistant_start|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65531": {
+      "content": "<|assistant_end|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65532": {
+      "content": "<|python_start|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65533": {
+      "content": "<|python_end|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65534": {
+      "content": "<|output_start|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "65535": {
+      "content": "<|output_end|>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    }
+  },
+  "additional_special_tokens": [
+    "<|user_start|>",
+    "<|user_end|>",
+    "<|assistant_start|>",
+    "<|python_start|>",
+    "<|python_end|>",
+    "<|output_start|>",
+    "<|output_end|>"
+  ],
+  "bos_token": "<|bos|>",
+  "clean_up_tokenization_spaces": false,
+  "eos_token": "<|assistant_end|>",
+  "extra_special_tokens": {},
+  "model_input_names": [
+    "input_ids",
+    "attention_mask"
+  ],
+  "model_max_length": 1000000000000000019884624838656,
+  "pad_token": "<|assistant_end|>",
+  "tokenizer_class": "PreTrainedTokenizerFast",
+  "chat_template": "{{- bos_token }}\n{%- if messages[0]['role'] == 'system' -%}\n    {%- if messages[1] is not defined or messages[1]['role'] != 'user' -%}\n        {{- raise_exception(\"System message must be followed by a user message\") }}\n    {%- endif -%}\n    {%- set system_content = messages[0]['content'] -%}\n    {%- set loop_messages = messages[1:] -%}\n    {%- set first_user_has_system = true -%}\n{%- else -%}\n    {%- set system_content = \"\" -%}\n    {%- set loop_messages = messages -%}\n    {%- set first_user_has_system = false -%}\n{%- endif -%}\n{%- for message in loop_messages -%}\n    {%- if (message['role'] == 'user') != (loop.index0 % 2 == 0) -%}\n        {{- raise_exception(\"Conversation roles must alternate user/assistant/user/assistant/...\") }}\n    {%- endif -%}\n    {%- if message['role'] == 'user' -%}\n        {{- '<|user_start|>' }}\n        {%- if loop.first and first_user_has_system -%}\n            {{- system_content + '\\n\\n' }}\n        {%- endif -%}\n        {%- if message['content'] is not string -%}\n            {{- raise_exception(\"User messages must contain string content\") }}\n        {%- endif -%}\n        {{- message['content'] }}\n        {{- '<|user_end|>' }}\n    {%- elif message['role'] == 'assistant' -%}\n        {{- '<|assistant_start|>' }}\n        {%- if message['content'] is string -%}\n            {{- message['content'] }}\n        {%- elif message['content'] is iterable -%}\n            {%- for part in message['content'] -%}\n                {%- if part['type'] == 'text' -%}\n                    {{- part.get('text', '') }}\n                {%- elif part['type'] == 'python' -%}\n                    {{- '<|python_start|>' + part.get('text', '') + '<|python_end|>' }}\n                {%- elif part['type'] == 'python_output' -%}\n                    {{- '<|output_start|>' + part.get('text', '') + '<|output_end|>' }}\n                {%- else -%}\n                    {{- raise_exception(\"Unknown assistant content part: \" + part['type']) }}\n                {%- endif -%}\n            {%- endfor -%}\n        {%- else -%}\n            {{- raise_exception(\"Unsupported assistant content type\") }}\n        {%- endif -%}\n        {{- '<|assistant_end|>' }}\n    {%- endif -%}\n{%- endfor -%}\n{%- if add_generation_prompt -%}\n    {{- '<|assistant_start|>' }}\n{%- endif -%}\n"
+}

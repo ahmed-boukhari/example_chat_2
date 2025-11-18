@@ -1,0 +1,5 @@
+*.DS*
+Audio.js
+node_modules
+dist
+transformers.js-*

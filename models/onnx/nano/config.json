@@ -1,0 +1,49 @@
+{
+  "architectures": [
+    "NanoChatForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token": "<|bos|>",
+  "bos_token_id": 0,
+  "chat_template": "{% if messages[0]['role'] == 'system' %}<|bos|><|user_start|>{{ messages[0]['content'] }}\n\n{{ messages[1]['content'] }}<|user_end|>{% set messages = messages[2:] %}{% else %}<|bos|>{% endif %}{% for message in messages %}{% if loop.index0 % 2 == 0 %}<|user_start|>{{ message['content'] }}<|user_end|>{% else %}<|assistant_start|>{{ message['content'] }}<|assistant_end|>{% endif %}{% endfor %}",
+  "dtype": "bfloat16",
+  "eos_token": "<|assistant_end|>",
+  "eos_token_id": 65531,
+  "hidden_act": "relu2",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "logits_soft_cap": 15.0,
+  "max_position_embeddings": 2048,
+  "model_type": "nanochat",
+  "n_embd": 2048,
+  "n_head": 16,
+  "n_layer": 32,
+  "num_attention_heads": 16,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 16,
+  "pad_token": "<|assistant_end|>",
+  "pad_token_id": 65531,
+  "qkv_bias": false,
+  "resid_dropout": 0.0,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.57.0",
+  "use_cache": true,
+  "vocab_size": 65536,
+  "transformers.js_config": {
+    "dtype": "q4",
+    "use_external_data_format": {
+      "model.onnx": 4,
+      "model_fp16.onnx": 2,
+      "model_q4.onnx": 2,
+      "model_q4f16.onnx": 1
+    },
+    "kv_cache_dtype": {
+      "q4f16": "float16",
+      "fp16": "float16"
+    }
+  }
+}
