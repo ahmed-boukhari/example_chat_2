@@ -14,7 +14,10 @@ import {
 env.localModelPath = './models/';
 env.allowRemoteModels = false;
 env.allowLocalModels = true;
-env.backends.onnx.wasm.wasmPaths = '/Users/ahhmed/Library/Application Support/Anki2/addons21/WhisperWeb/';
+var loc = location.pathname;
+var dir = loc.substring(0, loc.lastIndexOf('/'));
+env.backends.onnx.wasm.wasmPaths = decodeURIComponent(dir) + '/';
+console.log('[Worker] WASM paths set to:', decodeURIComponent(dir));
 // env.backends.onnx.wasm.numThreads = 4;
 // ============================================================================
 // STREAMING & INTERRUPTION UTILITIES
